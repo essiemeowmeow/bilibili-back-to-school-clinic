@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B站不想开学门诊 · 专治各种不想上学的疑难杂症</title>
+    <style>
+        /* ==================== 基础重置 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            /* 纪念碑谷风格配色 */
+            --bg-cream: #FDF6F0;
+            --bg-pink: #FFF0F3;
+            --coral: #FF9A9E;
+            --coral-dark: #F08085;
+            --mint: #A8E6CF;
+            --mint-dark: #7DD3B0;
+            --lavender: #DDA0DD;
+            --sky: #AEC6CF;
+            --cream: #FAD0C4;
+            --sun: #FFD93D;
+            --text-dark: #4A4A4A;
+            --text-medium: #6B6B6B;
+            --text-light: #9B9B9B;
+            --white: #FFFFFF;
+            --shadow-soft: rgba(74, 74, 74, 0.08);
+            --shadow-medium: rgba(74, 74, 74, 0.12);
+            --bili-pink: #FB7299;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, var(--bg-cream) 0%, var(--bg-pink) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #app {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        /* ==================== 几何装饰背景 ==================== */
+        .geo-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .geo-shape {
+            position: absolute;
+            opacity: 0.15;
+        }
+
+        .geo-triangle-1 {
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 104px solid var(--mint);
+            top: 10%;
+            right: -20px;
+            transform: rotate(15deg);
+        }
+
+        .geo-triangle-2 {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 69px solid var(--coral);
+            top: 25%;
+            left: -15px;
+            transform: rotate(-10deg);
+        }
+
+        .geo-circle-1 {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--lavender);
+            bottom: 15%;
+            right: -30px;
+        }
+
+        .geo-circle-2 {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--sky);
+            top: 45%;
+            left: -20px;
+        }
+
+        .geo-rect-1 {
+            width: 100px;
+            height: 100px;
+            background: var(--cream);
+            bottom: 35%;
+            left: 10%;
+            transform: rotate(20deg);
+            border-radius: 16px;
+        }
+
+        /* ==================== 页面容器 ==================== */
+        .screen {
+            display: none;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: 24px 20px 40px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .screen.flex-active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== 通用卡片 ==================== */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--coral), var(--mint), var(--sky), var(--lavender));
+            opacity: 0.6;
+        }
+
+        /* ==================== 按钮 ==================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255, 154, 158, 0.45);
+        }
+
+        .btn-primary:disabled {
+            background: #DDD;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--coral-dark);
+            border: 2px solid var(--coral);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-pink);
+        }
+
+        .btn-small {
+            width: auto;
+            padding: 12px 24px;
+            font-size: 14px;
+        }
+
+        /* ==================== 标签 ==================== */
+        .tag {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            background: var(--bg-cream);
+            color: var(--text-medium);
+        }
+
+        .tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-soft);
+        }
+
+        .tag.selected {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            border-color: var(--coral);
+            box-shadow: 0 4px 16px rgba(255, 154, 158, 0.3);
+        }
+
+        /* ==================== 首页 ==================== */
+        .home-screen {
+            text-align: center;
+        }
+
+        /* 纪念碑谷风格建筑主视觉 */
+        .home-art {
+            width: 220px;
+            height: 180px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .home-art-sun {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sun) 0%, #FFE082 100%);
+            opacity: 0.85;
+            box-shadow: 0 0 40px rgba(255, 217, 61, 0.3);
+        }
+
+        .home-art-mountain-back {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--mint) 0%, var(--mint-dark) 100%);
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            opacity: 0.6;
+        }
+
+        .home-art-platform-1 {
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 16px;
+            background: linear-gradient(90deg, var(--cream), #FBCFB9);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-soft);
+        }
+
+        .home-art-arch {
+            position: absolute;
+            bottom: 61px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 50px;
+            background: linear-gradient(180deg, var(--lavender) 0%, #D49BD4 100%);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .home-art-arch::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 35px;
+            background: var(--bg-cream);
+            border-radius: 14px 14px 0 0;
+        }
+
+        .home-art-platform-2 {
+            position: absolute;
+            bottom: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 14px;
+            background: linear-gradient(90deg, var(--sky), #9BBBC3);
+            border-radius: 7px;
+            box-shadow: 0 4px 12px var(--shadow-soft);
+        }
+
+        .home-art-flag {
+            position: absolute;
+            bottom: 89px;
+            left: 58%;
+            width: 4px;
+            height: 28px;
+            background: var(--text-light);
+            border-radius: 2px;
+        }
+
+        .home-art-flag::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 4px;
+            width: 18px;
+            height: 12px;
+            background: var(--coral);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .home-art-cloud {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+            width: 50px;
+            height: 20px;
+            background: var(--white);
+            border-radius: 20px;
+            opacity: 0.7;
+        }
+
+        .home-art-tv {
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 52px;
+            z-index: 10;
+            filter: drop-shadow(0 4px 12px var(--shadow-medium));
+        }
+
+        .home-title-wrap {
+            margin-bottom: 10px;
+        }
+
+        .home-brand {
+            display: inline-block;
+            background: var(--bili-pink);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .home-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--coral-dark);
+            letter-spacing: -1px;
+            line-height: 1.25;
+        }
+
+        .home-subtitle {
+            font-size: 15px;
+            color: var(--text-medium);
+            margin-bottom: 28px;
+            padding: 0 30px;
+        }
+
+        /* 首页特色标签：2x2 轻量卡片 */
+        .home-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto 36px;
+        }
+
+        .home-feature-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 8px;
+            border-radius: 14px;
+            font-size: 12px;
+            color: var(--text-medium);
+            text-align: center;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            backdrop-filter: blur(4px);
+        }
+
+        .home-feature-item::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--coral);
+            flex-shrink: 0;
+        }
+
+        .home-buttons {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 0 auto;
+        }
+
+
+
+        /* ==================== 顶部导航 ==================== */
+        .nav-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-medium);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 0;
+            background: none;
+            border: none;
+        }
+
+        .back-btn:hover {
+            color: var(--coral-dark);
+        }
+
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-right: 60px;
+        }
+
+        /* ==================== 进度条 ==================== */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            padding: 0 8px;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #E8E8E8;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .progress-step.active .progress-dot {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 154, 158, 0.35);
+        }
+
+        .progress-step.completed .progress-dot {
+            background: var(--mint);
+            color: white;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            right: -50%;
+            height: 3px;
+            background: #E8E8E8;
+            z-index: 1;
+        }
+
+        .progress-line.completed {
+            background: var(--mint);
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .progress-step.active .progress-label {
+            color: var(--coral-dark);
+            font-weight: 600;
+        }
+
+        /* ==================== 挂号页 ==================== */
+        .register-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .register-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .register-subtitle {
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .department-card {
+            padding: 20px;
+        }
+
+        .department-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .department-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: var(--bg-pink);
+        }
+
+        .department-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .symptoms-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -6px;
+        }
+
+        .selected-count {
+            text-align: center;
+            font-size: 15px;
+            color: var(--text-medium);
+            margin: 24px 0;
+            padding: 16px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px var(--shadow-soft);
+        }
+
+        .selected-count .count {
+            color: var(--coral-dark);
+            font-weight: 800;
+            font-size: 22px;
+        }
+
+        /* ==================== 诊断页 ==================== */
+        .report-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .report-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--mint) 0%, var(--mint-dark) 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .report-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .report-card {
+            background: linear-gradient(135deg, #F0FDF6 0%, var(--white) 100%);
+            border: 1px solid #E0F5EB;
+        }
+
+        .report-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px dashed #D0EBE0;
+        }
+
+        .report-row:last-child {
+            border-bottom: none;
+        }
+
+        .report-label {
+            width: 80px;
+            color: var(--text-light);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .report-value {
+            flex: 1;
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .doctor-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--white);
+        }
+
+        .doctor-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bg-pink) 0%, var(--cream) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px var(--shadow-soft);
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .doctor-title {
+            font-size: 13px;
+            color: var(--coral-dark);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .doctor-quote {
+            font-size: 13px;
+            color: var(--text-medium);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        /* ==================== 处方页 ==================== */
+        .rx-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .rx-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .rx-subtitle {
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .rx-card {
+            background: linear-gradient(135deg, #FFF8F9 0%, var(--white) 100%);
+            border: 2px solid var(--coral);
+        }
+
+        .rx-item {
+            display: flex;
+            gap: 14px;
+            padding: 18px 0;
+            border-bottom: 1px dashed var(--coral);
+            opacity: 0;
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        .rx-item:nth-child(1) { animation-delay: 0.1s; }
+        .rx-item:nth-child(2) { animation-delay: 0.2s; }
+        .rx-item:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .rx-item:last-child {
+            border-bottom: none;
+        }
+
+        .rx-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .rx-content {
+            flex: 1;
+        }
+
+        .rx-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .rx-desc {
+            font-size: 13px;
+            color: var(--text-medium);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .rx-usage {
+            font-size: 12px;
+            color: var(--coral-dark);
+            background: var(--bg-pink);
+            padding: 6px 12px;
+            border-radius: 14px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .rx-doctor-note {
+            background: var(--bg-pink);
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 18px;
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .rx-doctor-note::before {
+            content: "💬 ";
+        }
+
+        /* ==================== 证书页 ==================== */
+        .cert-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .cert-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .cert-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .cert-card {
+            background: linear-gradient(135deg, var(--white) 0%, #FFF8F9 100%);
+            border: 3px solid var(--coral);
+            text-align: center;
+            position: relative;
+            padding: 32px 24px;
+        }
+
+        .cert-card::before,
+        .cert-card::after {
+            content: "✦";
+            position: absolute;
+            color: var(--coral);
+            font-size: 24px;
+            opacity: 0.25;
+        }
+
+        .cert-card::before {
+            top: 20px;
+            left: 20px;
+        }
+
+        .cert-card::after {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .cert-patient-id {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .cert-result {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--coral-dark);
+            margin-bottom: 14px;
+        }
+
+        .cert-doctor {
+            font-size: 14px;
+            color: var(--text-medium);
+            margin-bottom: 20px;
+        }
+
+        .cert-seal {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            border: 3px solid var(--coral);
+            color: var(--coral);
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.4;
+            transform: rotate(-12deg);
+            margin: 0 auto;
+            letter-spacing: 1px;
+        }
+
+        .flag-card {
+            text-align: left;
+        }
+
+        .flag-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .flag-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #F5F5F5;
+            font-size: 14px;
+            color: var(--text-medium);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .flag-item:last-child {
+            border-bottom: none;
+        }
+
+        .flag-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--coral);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .flag-item.checked .flag-checkbox {
+            background: var(--mint);
+            border-color: var(--mint);
+        }
+
+        .flag-item.checked .flag-checkbox::after {
+            content: "✓";
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .flag-item.checked .flag-text {
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .share-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .share-actions .btn {
+            flex: 1;
+        }
+
+        /* ==================== 详情页 ==================== */
+        .details-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .details-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .details-subtitle {
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .details-section h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--coral-dark);
+            margin-bottom: 12px;
+        }
+
+        .details-section p {
+            font-size: 14px;
+            color: var(--text-medium);
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .details-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .details-section li {
+            font-size: 14px;
+            color: var(--text-medium);
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .details-section li::before {
+            content: "●";
+            color: var(--coral);
+            font-size: 8px;
+            position: absolute;
+            left: 0;
+            top: 14px;
+        }
+
+        /* ==================== 提示弹窗 ==================== */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(74, 74, 74, 0.9);
+            color: white;
+            padding: 16px 28px;
+            border-radius: 14px;
+            font-size: 14px;
+            z-index: 1000;
+            display: none;
+            text-align: center;
+            max-width: 80%;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ==================== 几何小装饰 ==================== */
+        .corner-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--coral);
+            opacity: 0.3;
+        }
+
+        /* ==================== 响应式微调 ==================== */
+        @media (max-width: 380px) {
+            .home-title { font-size: 30px; }
+            .card { padding: 18px; }
+            .tag { padding: 8px 14px; font-size: 13px; }
+        }
+
+        @media (min-width: 481px) {
+            .geo-decoration {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== 可编辑配置区 START ==================== -->
+<!--
+  这里是 H5 的可编辑配置区。
+  如需修改症状、UP主、处方内容、Flag、文案等，只需修改下面的 CONFIG 对象即可。
+  无需改动 HTML/JS 代码。
+-->
+<script>
+const CONFIG = {
+    // 首页文案
+    home: {
+        // 品牌标签，显示在标题上方
+        brand: "哔哩哔哩",
+        // 主标题
+        title: "不想开学门诊",
+        subtitle: "专治各种不想上学的疑难杂症",
+        // 是否显示首页小电视 emoji：true=显示，false=隐藏
+        showTV: false,
+        // 首页特色标签，建议 4 个，2x2 排列
+        features: ["挂号免费", "名医坐镇", "现场开方", "立刻重启"],
+        startBtnText: "去挂号",
+        // 详情页入口文案，可以写得更有趣
+        detailLinkText: "👀 看看这门诊什么来头"
+    },
+
+    // 挂号页文案
+    register: {
+        title: "今天挂什么科？",
+        subtitle: "勾选你的开学疑难杂症，最多选 3 个",
+        submitBtnText: "提交挂号",
+        minSelect: 1,
+        maxSelect: 3
+    },
+
+    // 科室和症状配置
+    departments: [
+        {
+            id: "knowledge",
+            name: "知识蒸发科",
+            icon: "🧠",
+            symptoms: [
+                { id: "k1", name: "知识已蒸发", desc: "暑假把脑子格式化了" },
+                { id: "k2", name: "CPU冒烟症", desc: "一看到课表CPU开始冒烟" },
+                { id: "k3", name: "DDL提前焦虑", desc: "DDL还没开始已经焦虑" }
+            ]
+        },
+        {
+            id: "biological",
+            name: "生物钟抢救科",
+            icon: "⏰",
+            symptoms: [
+                { id: "b1", name: "凌晨三点还在线", desc: "生物钟仍停留在凌晨三点" },
+                { id: "b2", name: "早八昏迷综合征", desc: "听到早八就失去意识" },
+                { id: "b3", name: "起床困难晚期", desc: "床上有强力磁铁吸住我" }
+            ]
+        },
+        {
+            id: "social",
+            name: "社交重启科",
+            icon: "💬",
+            symptoms: [
+                { id: "s1", name: "社恐系统回滚", desc: "社交能力退回到出厂设置" },
+                { id: "s2", name: "同学名字已丢失", desc: "一个假期过去名字全忘了" },
+                { id: "s3", name: "想社交但不会开场", desc: "想认识新朋友但开口即尴尬" }
+            ]
+        },
+        {
+            id: "pe",
+            name: "体测防御科",
+            icon: "🏃",
+            symptoms: [
+                { id: "p1", name: "800米恐惧症", desc: "听到800米就腿软" },
+                { id: "p2", name: "坐位体前屈僵硬", desc: "身体硬得像块钢板" },
+                { id: "p3", name: "引体向上绝缘体", desc: "和单杠之间只有重力" }
+            ]
+        },
+        {
+            id: "canteen",
+            name: "食堂厌倦科",
+            icon: "🍱",
+            symptoms: [
+                { id: "c1", name: "食堂吃一周就emo", desc: "看到食堂菜单就失去梦想" },
+                { id: "c2", name: "暑假胃被养刁了", desc: "妈妈的饭把胃惯坏了" },
+                { id: "c3", name: "不知道吃什么", desc: "每天三顿都是选择困难症" }
+            ]
+        },
+        {
+            id: "entertainment",
+            name: "娱乐戒断科",
+            icon: "🎮",
+            symptoms: [
+                { id: "e1", name: "追番太快乐不想回现实", desc: "番剧世界的引力太强" },
+                { id: "e2", name: "游戏赛季结束人也结束", desc: "排位还没打完就要开学" },
+                { id: "e3", name: "UP主暑假失联", desc: "我关注的UP主都去哪儿了" }
+            ]
+        }
+    ],
+
+    // UP主医生配置
+    doctors: [
+        {
+            id: "bdao",
+            name: "毕导THU",
+            title: "学习/科研方法科主任",
+            avatar: "🎓",
+            quote: "你的大脑不是被格式化了，是在等待一个更强的操作系统。",
+            departments: ["knowledge"]
+        },
+        {
+            id: "luoxiang",
+            name: "罗翔说刑法",
+            title: "人生哲学与法学主任医师",
+            avatar: "⚖️",
+            quote: "人生唯一确定的就是不确定的人生，但开学这件事可以先试着接受。",
+            departments: ["social", "biological"]
+        },
+        {
+            id: "pamela",
+            name: "帕梅拉Pamela",
+            title: "运动健康科主任",
+            avatar: "💪",
+            quote: "体测不是敌人，是你和更好自己的一次会面。",
+            departments: ["pe", "canteen"]
+        },
+        {
+            id: "hexuan",
+            name: "老师好我叫何同学",
+            title: "科技灵感主治医师",
+            avatar: "📱",
+            quote: "看完了爆肝视频，你还好意思继续昏迷吗？",
+            departments: ["biological", "knowledge"]
+        },
+        {
+            id: "fan",
+            name: "泛式",
+            title: "动漫杂谈科主任",
+            avatar: "🎬",
+            quote: "新番导视已更新，现实世界的番剧也不会让你失望。",
+            departments: ["entertainment"]
+        },
+        {
+            id: "xiaoyao",
+            name: "逍遥散人",
+            title: "游戏心态科主治医师",
+            avatar: "🎮",
+            quote: "从受苦中找到乐趣，开学不过是一场新的游戏关卡。",
+            departments: ["entertainment", "social"]
+        }
+    ],
+
+    // 处方库配置
+    prescriptions: {
+        knowledge: {
+            title: "知识重启方",
+            items: [
+                { name: "B站课堂专区《开学第一课》", desc: "由名师带你3小时重构知识体系", usage: "每日1课时，连续服用3天" },
+                { name: "取景框看世界《大学如何不虚度》", desc: "从目标管理到时间规划一网打尽", usage: "睡前观看，笔记服用" },
+                { name: "毕导THU学习方法合集", desc: "用科学方法治愈知识蒸发", usage: "焦虑时按需服用" }
+            ],
+            doctorNote: "禁止自我怀疑，你只是需要一个'哔'的一声重启。"
+        },
+        biological: {
+            title: "生物钟校准方",
+            items: [
+                { name: "早八人专属闹铃合集", desc: "B站搜索'早八人 闹铃'", usage: "设为起床闹钟，每日清晨1次" },
+                { name: "宿舍友好型运动视频", desc: "5分钟唤醒身体，不需要去操场", usage: "起床后立即服用" },
+                { name: "助眠白噪音/ASMR", desc: "让大脑知道晚上该关机了", usage: "睡前30分钟服用" }
+            ],
+            doctorNote: "调整作息就像调时差，给自己一周时间。"
+        },
+        social: {
+            title: "社交系统重启方",
+            items: [
+                { name: "罗翔老师人生金句合集", desc: "治愈社恐，从理解人性开始", usage: "社交前服用，增强底气" },
+                { name: "聊天开场话题指南", desc: "从'你也来了'到真实对话", usage: "见面前预习" },
+                { name: "社团招新/兴趣小组推荐", desc: "找到同好，社交自然发生", usage: "开学后按需加入" }
+            ],
+            doctorNote: "你不是不会社交，只是还没遇到对的人。"
+        },
+        pe: {
+            title: "体测防御强化方",
+            items: [
+                { name: "帕梅拉宿舍友好训练", desc: "不需要器材，只需要一块瑜伽垫", usage: "每周3次，每次20分钟" },
+                { name: "800米/1000米呼吸节奏指南", desc: "科学配速，跑完不躺", usage: "体测前一周服用" },
+                { name: "拉伸放松跟练", desc: "体测后修复套餐", usage: "运动后服用" }
+            ],
+            doctorNote: "体测会过去，但运动习惯可以留下来。"
+        },
+        canteen: {
+            title: "食堂生存指南方",
+            items: [
+                { name: "宿舍小锅美食教程", desc: "在规则允许范围内改善伙食", usage: "周末按需服用" },
+                { name: "校园周边美食探店", desc: "发现学校附近隐藏菜单", usage: "换口味时服用" },
+                { name: "健康饮食搭配指南", desc: "食堂也能吃出营养均衡", usage: "每日餐前参考" }
+            ],
+            doctorNote: "胃是情绪器官，好好吃饭就是好好爱自己。"
+        },
+        entertainment: {
+            title: "娱乐戒断缓冲方",
+            items: [
+                { name: "新番导视/追番时间表", desc: "把追番变成新学期的奖励机制", usage: "每周固定时间服用" },
+                { name: "UP主开学季更新汇总", desc: "你关注的UP主都在这儿了", usage: "学习间隙按需服用" },
+                { name: "游戏时间管理法", desc: "让游戏成为解压工具而非逃避工具", usage: "每日限量服用" }
+            ],
+            doctorNote: "娱乐不是敌人，失控才是。"
+        }
+    },
+
+    // 诊断意见模板
+    diagnosis: {
+        header: "经系统扫描，你的开学状态如下：",
+        opinions: [
+            "你的状态不是'废了'，只是暂时处在'假期模式'。需要的是一次温和的重启，而不是自我批评。",
+            "症状虽多，但都属于'开学过渡期常见反应'。遵医嘱，按时服用B站内容，状态可恢复。",
+            "你的大脑并未丢失知识，只是文件被压缩了。一份好的'解压软件'就能唤醒它。",
+            "这不是懒，是人类面对生活节奏切换时的正常应激。允许自己慢慢来。"
+        ],
+        advices: [
+            "禁止自我PUA，先从早睡15分钟开始。",
+            "允许自己有一个缓冲期，新学期不需要第一天就满血。",
+            "把大目标拆成小任务，DDL 会自己变乖。",
+            "找到适合自己的节奏，比模仿别人更重要。"
+        ]
+    },
+
+    // 证书页文案
+    certificate: {
+        title: "新学期状态重启证书",
+        badge: "诊断完成",
+        seal: "B站\n认证",
+        flagTitle: "新学期 Flag 清单",
+        flags: [
+            "这学期绝不挂科",
+            "早八成功起床率提高到 80%",
+            "每周坚持看一部纪录片",
+            "学会一个剪辑软件，当个 UP 主",
+            "交到一个能一起看番的挚友"
+        ],
+        shareBtnText: "分享我的证书",
+        retryBtnText: "再挂一次号",
+        shareTextTemplate: "我在 B 站「不想开学门诊」挂了号，确诊为【{symptom}】。主治医师 {doctor} 给我开了新学期处方单，状态重启中……你也来挂个号吧！"
+    },
+
+    // 详情页内容
+    details: {
+        title: "活动方案详情",
+        sections: [
+            {
+                title: "项目背景",
+                paragraphs: [
+                    "每年开学季前后，'不想开学'都会成为社交媒体上的高频情绪词。这种情绪不是简单的'懒'或'厌学'，而是年轻人在假期自由节奏与开学规训节奏之间切换时的正常应激反应。",
+                    "B站作为年轻人密度最高的内容社区，天然承接了这类情绪的表达和消解。"
+                ]
+            },
+            {
+                title: "用户洞察",
+                paragraphs: [
+                    "开学焦虑主要来自四个层面的'掉线'：学习层面（知识遗忘、DDL焦虑）、生活层面（生物钟紊乱、食堂厌倦、体测恐惧）、社交层面（社恐复发、忘记同学名字）、娱乐层面（追番/游戏停不下来）。",
+                    "核心机会：用户需要的不是被教育'要振作'，而是被理解、被调侃、被给到一个轻松的过渡仪式。"
+                ]
+            },
+            {
+                title: "目标人群",
+                list: [
+                    "主要人群：18-24岁大学生与准大学生",
+                    "泛化人群：高中生、研究生、年轻职场新人",
+                    "品牌侧人群：B站老用户与轻度用户"
+                ]
+            },
+            {
+                title: "品牌目标",
+                list: [
+                    "短期：提升开学季站内活动参与度和话题讨论量",
+                    "中期：强化'B站懂年轻人开学焦虑'的平台心智",
+                    "长期：推动B站从娱乐平台向年轻人生活解决方案平台认知延伸"
+                ]
+            },
+            {
+                title: "玩法链路",
+                list: [
+                    "Step 1：挂号 — 选择开学疑难杂症",
+                    "Step 2：诊断 — UP主医生出具电子诊断单",
+                    "Step 3：开方 — 生成B站专属内容处方单",
+                    "Step 4：证书 — 领取新学期状态重启证书并分享"
+                ]
+            }
+        ],
+        backText: "返回首页"
+    }
+};
+</script>
+<!-- ==================== 可编辑配置区 END ==================== -->
+
+    <div id="app">
+        <!-- 几何装饰背景 -->
+        <div class="geo-decoration">
+            <div class="geo-shape geo-triangle-1"></div>
+            <div class="geo-shape geo-triangle-2"></div>
+            <div class="geo-shape geo-circle-1"></div>
+            <div class="geo-shape geo-circle-2"></div>
+            <div class="geo-shape geo-rect-1"></div>
+        </div>
+
+        <!-- 提示弹窗 -->
+        <div id="toast" class="toast"></div>
+
+        <!-- ==================== 首页 ==================== -->
+        <div id="screen-home" class="screen flex-active active">
+            <div class="home-art" id="home-art">
+                <!-- 纪念碑谷风格建筑，由 JS 根据 CONFIG.home.showTV 动态渲染 -->
+            </div>
+            <div class="home-title-wrap">
+                <span class="home-brand" id="home-brand">哔哩哔哩</span>
+                <h1 class="home-title" id="home-title">不想开学门诊</h1>
+            </div>
+            <p class="home-subtitle" id="home-subtitle">专治各种不想上学的疑难杂症</p>
+            <div class="home-features" id="home-features">
+                <span class="home-feature-item">挂号免费</span>
+                <span class="home-feature-item">名医坐镇</span>
+                <span class="home-feature-item">现场开方</span>
+                <span class="home-feature-item">立刻重启</span>
+            </div>
+            <div class="home-buttons">
+                <button class="btn btn-primary" id="btn-start" onclick="window.app.goToRegister()">去挂号</button>
+                <button class="btn btn-secondary" id="btn-detail" onclick="window.app.goToDetails()">👀 看看这门诊什么来头</button>
+            </div>
+        </div>
+
+        <!-- ==================== 挂号页 ==================== -->
+        <div id="screen-register" class="screen">
+            <div class="nav-header">
+                <button class="back-btn" onclick="window.app.goToHome()">← 返回首页</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-step active">
+                    <div class="progress-dot">1</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-label">挂号</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">2</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-label">诊断</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">3</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-label">开方</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">4</div>
+                    <div class="progress-label">证书</div>
+                </div>
+            </div>
+
+            <div class="register-header">
+                <h2 class="register-title" id="register-title">今天挂什么科？</h2>
+                <p class="register-subtitle" id="register-subtitle">勾选你的开学疑难杂症，最多选 3 个</p>
+            </div>
+
+            <div id="departments-container"></div>
+
+            <div class="selected-count">
+                已选择 <span class="count" id="selected-count">0</span> 个症状
+            </div>
+
+            <button class="btn btn-primary" id="btn-submit-register" onclick="window.app.submitRegister()" disabled>提交挂号</button>
+        </div>
+
+        <!-- ==================== 诊断页 ==================== -->
+        <div id="screen-diagnosis" class="screen">
+            <div class="nav-header">
+                <button class="back-btn" onclick="window.app.goToRegister()">← 重新挂号</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-step completed">
+                    <div class="progress-dot">✓</div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-label">挂号</div>
+                </div>
+                <div class="progress-step active">
+                    <div class="progress-dot">2</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-label">诊断</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">3</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-label">开方</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">4</div>
+                    <div class="progress-label">证书</div>
+                </div>
+            </div>
+
+            <div class="report-header">
+                <span class="report-badge">电子诊断单</span>
+                <h2 class="report-title">诊断报告</h2>
+            </div>
+
+            <div class="card report-card">
+                <div class="report-row">
+                    <div class="report-label">患者 ID</div>
+                    <div class="report-value" id="report-patient-id">-</div>
+                </div>
+                <div class="report-row">
+                    <div class="report-label">挂号科室</div>
+                    <div class="report-value" id="report-department">-</div>
+                </div>
+                <div class="report-row">
+                    <div class="report-label">主诉症状</div>
+                    <div class="report-value" id="report-symptoms">-</div>
+                </div>
+                <div class="report-row">
+                    <div class="report-label">诊断意见</div>
+                    <div class="report-value" id="report-opinion">-</div>
+                </div>
+                <div class="report-row">
+                    <div class="report-label">医嘱</div>
+                    <div class="report-value" id="report-advice">-</div>
+                </div>
+            </div>
+
+            <div class="card doctor-card">
+                <div class="doctor-avatar" id="doctor-avatar">🎓</div>
+                <div class="doctor-info">
+                    <div class="doctor-name" id="doctor-name">-</div>
+                    <div class="doctor-title" id="doctor-title">-</div>
+                    <div class="doctor-quote" id="doctor-quote">-</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="window.app.goToPrescription()">查看处方单</button>
+        </div>
+
+        <!-- ==================== 处方页 ==================== -->
+        <div id="screen-prescription" class="screen">
+            <div class="nav-header">
+                <button class="back-btn" onclick="window.app.goToDiagnosis()">← 返回诊断</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-step completed">
+                    <div class="progress-dot">✓</div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-label">挂号</div>
+                </div>
+                <div class="progress-step completed">
+                    <div class="progress-dot">✓</div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-label">诊断</div>
+                </div>
+                <div class="progress-step active">
+                    <div class="progress-dot">3</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-label">开方</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">4</div>
+                    <div class="progress-label">证书</div>
+                </div>
+            </div>
+
+            <div class="rx-header">
+                <h2 class="rx-title" id="rx-title">新学期处方单</h2>
+                <p class="rx-subtitle">请按医嘱服用，状态重启指日可待</p>
+            </div>
+
+            <div class="card rx-card" id="rx-card"></div>
+
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="window.app.goToCertificate()">领取重启证书</button>
+        </div>
+
+        <!-- ==================== 证书页 ==================== -->
+        <div id="screen-certificate" class="screen">
+            <div class="nav-header">
+                <button class="back-btn" onclick="window.app.goToPrescription()">← 返回处方</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-step completed">
+                    <div class="progress-dot">✓</div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-label">挂号</div>
+                </div>
+                <div class="progress-step completed">
+                    <div class="progress-dot">✓</div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-label">诊断</div>
+                </div>
+                <div class="progress-step completed">
+                    <div class="progress-dot">✓</div>
+                    <div class="progress-line completed"></div>
+                    <div class="progress-label">开方</div>
+                </div>
+                <div class="progress-step active">
+                    <div class="progress-dot">4</div>
+                    <div class="progress-label">证书</div>
+                </div>
+            </div>
+
+            <div class="cert-header">
+                <span class="cert-badge" id="cert-badge">诊断完成</span>
+                <h2 class="cert-title" id="cert-title">新学期状态重启证书</h2>
+            </div>
+
+            <div class="card cert-card">
+                <div class="cert-patient-id" id="cert-patient-id">-</div>
+                <div class="cert-result" id="cert-result">-</div>
+                <div class="cert-doctor" id="cert-doctor">-</div>
+                <div class="cert-seal" id="cert-seal">B站<br>认证</div>
+            </div>
+
+            <div class="card flag-card">
+                <div class="flag-title" id="flag-title">新学期 Flag 清单</div>
+                <div id="flags-container"></div>
+            </div>
+
+            <div class="share-actions">
+                <button class="btn btn-primary" id="btn-share" onclick="window.app.shareCertificate()">分享我的证书</button>
+                <button class="btn btn-secondary" onclick="window.app.goToHome()">再挂一次号</button>
+            </div>
+        </div>
+
+        <!-- ==================== 详情页 ==================== -->
+        <div id="screen-details" class="screen">
+            <div class="nav-header">
+                <button class="back-btn" onclick="window.app.goToHome()">← 返回首页</button>
+            </div>
+
+            <div class="details-header">
+                <h2 class="details-title" id="details-title">活动方案详情</h2>
+                <p class="details-subtitle">策略、洞察与目标人群</p>
+            </div>
+
+            <div id="details-container"></div>
+        </div>
+    </div>
+
+    <script>
+
+// ==================== H5 交互逻辑 ====================
+// 把所有功能挂在 window.app 上，避免全局污染
+window.app = {
+    selectedSymptoms: [],
+    currentDiagnosis: null,
+
+    init: function() {
+        console.log('[不想开学门诊] H5 初始化开始');
+        this.initHome();
+        this.initRegister();
+        this.initDetails();
+        console.log('[不想开学门诊] H5 初始化完成');
+    },
+
+    // ==================== 页面切换 ====================
+    switchScreen: function(screenId) {
+        console.log('[不想开学门诊] 切换页面到:', screenId);
+        var screens = document.querySelectorAll('.screen');
+        for (var i = 0; i < screens.length; i++) {
+            screens[i].classList.remove('active');
+            screens[i].classList.remove('flex-active');
+        }
+        var target = document.getElementById(screenId);
+        target.classList.add('active');
+        if (screenId === 'screen-home') {
+            target.classList.add('flex-active');
+        }
+        window.scrollTo(0, 0);
+    },
+
+    goToHome: function() {
+        this.selectedSymptoms = [];
+        this.currentDiagnosis = null;
+        this.updateSelectedCount();
+        this.renderDepartments();
+        this.switchScreen('screen-home');
+    },
+
+    goToRegister: function() {
+        this.switchScreen('screen-register');
+    },
+
+    goToDiagnosis: function() {
+        this.switchScreen('screen-diagnosis');
+    },
+
+    goToPrescription: function() {
+        this.renderPrescription();
+        this.switchScreen('screen-prescription');
+    },
+
+    goToCertificate: function() {
+        this.renderCertificate();
+        this.switchScreen('screen-certificate');
+    },
+
+    goToDetails: function() {
+        this.switchScreen('screen-details');
+    },
+
+    // ==================== 首页初始化 ====================
+    initHome: function() {
+        document.getElementById('home-brand').textContent = CONFIG.home.brand || '哔哩哔哩';
+        document.getElementById('home-title').textContent = CONFIG.home.title;
+        document.getElementById('home-subtitle').textContent = CONFIG.home.subtitle;
+        document.getElementById('btn-start').textContent = CONFIG.home.startBtnText;
+        document.getElementById('btn-detail').textContent = CONFIG.home.detailLinkText;
+
+        // 渲染首页纪念碑谷风格建筑
+        var artContainer = document.getElementById('home-art');
+        var artHTML =
+            '<div class="home-art-sun"></div>' +
+            '<div class="home-art-cloud"></div>' +
+            '<div class="home-art-mountain-back"></div>' +
+            '<div class="home-art-platform-1"></div>' +
+            '<div class="home-art-arch"></div>' +
+            '<div class="home-art-platform-2"></div>' +
+            '<div class="home-art-flag"></div>';
+        if (CONFIG.home.showTV) {
+            artHTML += '<div class="home-art-tv">📺</div>';
+        }
+        artContainer.innerHTML = artHTML;
+
+        // 渲染首页特色标签
+        var featuresContainer = document.getElementById('home-features');
+        featuresContainer.innerHTML = '';
+        for (var i = 0; i < CONFIG.home.features.length; i++) {
+            var span = document.createElement('span');
+            span.className = 'home-feature-item';
+            span.textContent = CONFIG.home.features[i];
+            featuresContainer.appendChild(span);
+        }
+    },
+
+    // ==================== 挂号页初始化 ====================
+    initRegister: function() {
+        document.getElementById('register-title').textContent = CONFIG.register.title;
+        document.getElementById('register-subtitle').textContent = CONFIG.register.subtitle;
+        document.getElementById('btn-submit-register').textContent = CONFIG.register.submitBtnText;
+        this.renderDepartments();
+    },
+
+    renderDepartments: function() {
+        var container = document.getElementById('departments-container');
+        container.innerHTML = '';
+
+        for (var i = 0; i < CONFIG.departments.length; i++) {
+            var dept = CONFIG.departments[i];
+            var card = document.createElement('div');
+            card.className = 'card department-card';
+
+            var header = document.createElement('div');
+            header.className = 'department-header';
+            header.innerHTML =
+                '<div class="department-icon">' + dept.icon + '</div>' +
+                '<div class="department-name">' + dept.name + '</div>';
+            card.appendChild(header);
+
+            var symptomsRow = document.createElement('div');
+            symptomsRow.className = 'symptoms-row';
+
+            for (var j = 0; j < dept.symptoms.length; j++) {
+                var symptom = dept.symptoms[j];
+                var tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = symptom.name;
+                tag.setAttribute('data-id', symptom.id);
+                tag.setAttribute('data-dept', dept.id);
+                tag.setAttribute('data-name', symptom.name);
+                tag.setAttribute('data-desc', symptom.desc);
+                var self = this;
+                tag.onclick = (function(t) {
+                    return function() { self.toggleSymptom(t); };
+                })(tag);
+                symptomsRow.appendChild(tag);
+            }
+
+            card.appendChild(symptomsRow);
+            container.appendChild(card);
+        }
+    },
+
+    toggleSymptom: function(tag) {
+        var id = tag.getAttribute('data-id');
+        var isSelected = tag.classList.contains('selected');
+
+        if (isSelected) {
+            this.selectedSymptoms = this.selectedSymptoms.filter(function(s) {
+                return s.id !== id;
+            });
+            tag.classList.remove('selected');
+        } else {
+            if (this.selectedSymptoms.length >= CONFIG.register.maxSelect) {
+                this.showToast('最多只能选择 ' + CONFIG.register.maxSelect + ' 个症状哦');
+                return;
+            }
+            this.selectedSymptoms.push({
+                id: id,
+                deptId: tag.getAttribute('data-dept'),
+                name: tag.getAttribute('data-name'),
+                desc: tag.getAttribute('data-desc')
+            });
+            tag.classList.add('selected');
+        }
+
+        this.updateSelectedCount();
+    },
+
+    updateSelectedCount: function() {
+        document.getElementById('selected-count').textContent = this.selectedSymptoms.length;
+        var btn = document.getElementById('btn-submit-register');
+        btn.disabled = this.selectedSymptoms.length < CONFIG.register.minSelect;
+    },
+
+    submitRegister: function() {
+        if (this.selectedSymptoms.length < CONFIG.register.minSelect) {
+            this.showToast('请至少选择 ' + CONFIG.register.minSelect + ' 个症状');
+            return;
+        }
+        this.generateDiagnosis();
+        this.switchScreen('screen-diagnosis');
+    },
+
+    // ==================== 诊断生成 ====================
+    generateDiagnosis: function() {
+        var deptCount = {};
+        for (var i = 0; i < this.selectedSymptoms.length; i++) {
+            var s = this.selectedSymptoms[i];
+            deptCount[s.deptId] = (deptCount[s.deptId] || 0) + 1;
+        }
+
+        var mainDeptId = '';
+        var maxCount = 0;
+        for (var deptId in deptCount) {
+            if (deptCount[deptId] > maxCount) {
+                maxCount = deptCount[deptId];
+                mainDeptId = deptId;
+            }
+        }
+
+        var mainDept = null;
+        for (var i = 0; i < CONFIG.departments.length; i++) {
+            if (CONFIG.departments[i].id === mainDeptId) {
+                mainDept = CONFIG.departments[i];
+                break;
+            }
+        }
+
+        var now = new Date();
+        var patientId = 'B站病友_' + now.getFullYear() +
+            String(now.getMonth() + 1).padStart(2, '0') +
+            String(now.getDate()).padStart(2, '0') + '_' +
+            Math.floor(Math.random() * 9000 + 1000);
+
+        // 匹配医生
+        var doctor = null;
+        for (var i = 0; i < CONFIG.doctors.length; i++) {
+            if (CONFIG.doctors[i].departments.indexOf(mainDeptId) !== -1) {
+                doctor = CONFIG.doctors[i];
+                break;
+            }
+        }
+        if (!doctor) {
+            doctor = CONFIG.doctors[0];
+        }
+
+        var opinion = CONFIG.diagnosis.opinions[Math.floor(Math.random() * CONFIG.diagnosis.opinions.length)];
+        var advice = CONFIG.diagnosis.advices[Math.floor(Math.random() * CONFIG.diagnosis.advices.length)];
+
+        var symptomNames = [];
+        for (var i = 0; i < this.selectedSymptoms.length; i++) {
+            symptomNames.push(this.selectedSymptoms[i].name);
+        }
+
+        this.currentDiagnosis = {
+            patientId: patientId,
+            department: mainDept ? mainDept.name : '综合门诊',
+            symptoms: symptomNames.join('、'),
+            mainSymptom: this.selectedSymptoms[0].name,
+            opinion: opinion,
+            advice: advice,
+            doctor: doctor,
+            mainDeptId: mainDeptId
+        };
+
+        document.getElementById('report-patient-id').textContent = this.currentDiagnosis.patientId;
+        document.getElementById('report-department').textContent = this.currentDiagnosis.department;
+        document.getElementById('report-symptoms').textContent = this.currentDiagnosis.symptoms;
+        document.getElementById('report-opinion').textContent = this.currentDiagnosis.opinion;
+        document.getElementById('report-advice').textContent = this.currentDiagnosis.advice;
+
+        document.getElementById('doctor-avatar').textContent = doctor.avatar;
+        document.getElementById('doctor-name').textContent = doctor.name;
+        document.getElementById('doctor-title').textContent = doctor.title;
+        document.getElementById('doctor-quote').textContent = '"' + doctor.quote + '"';
+    },
+
+    // ==================== 处方页渲染 ====================
+    renderPrescription: function() {
+        if (!this.currentDiagnosis) return;
+
+        var rxConfig = CONFIG.prescriptions[this.currentDiagnosis.mainDeptId] || CONFIG.prescriptions.knowledge;
+        document.getElementById('rx-title').textContent = rxConfig.title;
+
+        var rxCard = document.getElementById('rx-card');
+        rxCard.innerHTML = '';
+
+        for (var i = 0; i < rxConfig.items.length; i++) {
+            var item = rxConfig.items[i];
+            var rxItem = document.createElement('div');
+            rxItem.className = 'rx-item';
+            rxItem.innerHTML =
+                '<div class="rx-number">' + (i + 1) + '</div>' +
+                '<div class="rx-content">' +
+                    '<div class="rx-name">' + item.name + '</div>' +
+                    '<div class="rx-desc">' + item.desc + '</div>' +
+                    '<span class="rx-usage">' + item.usage + '</span>' +
+                '</div>';
+            rxCard.appendChild(rxItem);
+        }
+
+        var noteDiv = document.createElement('div');
+        noteDiv.className = 'rx-doctor-note';
+        noteDiv.textContent = this.currentDiagnosis.doctor.name + ' 医师寄语：' + rxConfig.doctorNote;
+        rxCard.appendChild(noteDiv);
+    },
+
+    // ==================== 证书页渲染 ====================
+    renderCertificate: function() {
+        if (!this.currentDiagnosis) return;
+
+        document.getElementById('cert-badge').textContent = CONFIG.certificate.badge;
+        document.getElementById('cert-title').textContent = CONFIG.certificate.title;
+        document.getElementById('cert-patient-id').textContent = '患者 ID：' + this.currentDiagnosis.patientId;
+        document.getElementById('cert-result').textContent = '确诊为：' + this.currentDiagnosis.mainSymptom;
+        document.getElementById('cert-doctor').textContent = '主治医师：' + this.currentDiagnosis.doctor.name;
+        document.getElementById('cert-seal').innerHTML = CONFIG.certificate.seal.replace(/\n/g, '<br>');
+        document.getElementById('flag-title').textContent = CONFIG.certificate.flagTitle;
+
+        var flagsContainer = document.getElementById('flags-container');
+        flagsContainer.innerHTML = '';
+        for (var i = 0; i < CONFIG.certificate.flags.length; i++) {
+            var item = document.createElement('div');
+            item.className = 'flag-item';
+            item.innerHTML =
+                '<div class="flag-checkbox"></div>' +
+                '<div class="flag-text">' + CONFIG.certificate.flags[i] + '</div>';
+            item.onclick = function() {
+                this.classList.toggle('checked');
+            };
+            flagsContainer.appendChild(item);
+        }
+
+        document.getElementById('btn-share').textContent = CONFIG.certificate.shareBtnText;
+    },
+
+    // ==================== 分享功能 ====================
+    shareCertificate: function() {
+        if (!this.currentDiagnosis) return;
+
+        var shareText = CONFIG.certificate.shareTextTemplate
+            .replace('{symptom}', this.currentDiagnosis.mainSymptom)
+            .replace('{doctor}', this.currentDiagnosis.doctor.name);
+
+        if (navigator.share) {
+            navigator.share({
+                title: CONFIG.home.title,
+                text: shareText,
+                url: window.location.href
+            }).catch((function(self) {
+                return function() { self.copyToClipboard(shareText); };
+            })(this));
+        } else {
+            this.copyToClipboard(shareText);
+        }
+    },
+
+    copyToClipboard: function(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            var self = this;
+            navigator.clipboard.writeText(text).then(function() {
+                self.showToast('分享文案已复制，去粘贴分享吧！');
+            }).catch(function() {
+                self.showToast(text);
+            });
+        } else {
+            this.showToast(text);
+        }
+    },
+
+    // ==================== 详情页初始化 ====================
+    initDetails: function() {
+        document.getElementById('details-title').textContent = CONFIG.details.title;
+
+        var container = document.getElementById('details-container');
+        container.innerHTML = '';
+
+        for (var i = 0; i < CONFIG.details.sections.length; i++) {
+            var section = CONFIG.details.sections[i];
+            var sectionDiv = document.createElement('div');
+            sectionDiv.className = 'card details-section';
+
+            var title = document.createElement('h3');
+            title.textContent = section.title;
+            sectionDiv.appendChild(title);
+
+            if (section.paragraphs) {
+                for (var j = 0; j < section.paragraphs.length; j++) {
+                    var para = document.createElement('p');
+                    para.textContent = section.paragraphs[j];
+                    sectionDiv.appendChild(para);
+                }
+            }
+
+            if (section.list) {
+                var ul = document.createElement('ul');
+                for (var j = 0; j < section.list.length; j++) {
+                    var li = document.createElement('li');
+                    li.textContent = section.list[j];
+                    ul.appendChild(li);
+                }
+                sectionDiv.appendChild(ul);
+            }
+
+            container.appendChild(sectionDiv);
+        }
+    },
+
+    // ==================== 提示弹窗 ====================
+    showToast: function(message) {
+        var toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 2500);
+    }
+};
+
+// ==================== 页面加载完成后初始化 ====================
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        window.app.init();
+    });
+} else {
+    window.app.init();
+}
+</script>
+</body>
+</html>
