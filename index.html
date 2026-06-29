@@ -289,96 +289,32 @@
         }
 
         .home-art {
-            width: 220px;
-            height: 200px;
-            margin: 0 auto 28px;
+            width: 260px;
+            height: 220px;
+            margin: 0 auto 24px;
             position: relative;
             animation: float 4s ease-in-out infinite;
         }
 
-        .home-character {
-            position: absolute;
-            bottom: 45px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 80px;
-            z-index: 10;
-            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.1));
+        .home-art svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
         }
 
-        .home-sun {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--yellow);
-            border: 3px solid var(--text-dark);
-            box-shadow: 3px 3px 0 var(--text-dark);
+        .home-art .sketch-line {
+            fill: none;
+            stroke: var(--text-dark);
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .home-sun::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            border: 3px dashed var(--yellow-dark);
-            border-radius: 50%;
-        }
-
-        .home-cloud {
-            position: absolute;
-            top: 25px;
-            left: 10px;
-            width: 55px;
-            height: 22px;
-            background: var(--white);
-            border: 3px solid var(--text-dark);
-            border-radius: 20px;
-            opacity: 0.9;
-        }
-
-        .home-cloud::before {
-            content: "";
-            position: absolute;
-            top: -12px;
-            left: 10px;
-            width: 22px;
-            height: 22px;
-            background: var(--white);
-            border: 3px solid var(--text-dark);
-            border-radius: 50%;
-            border-bottom: none;
-            border-right: none;
-        }
-
-        .home-hill {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 160px;
-            height: 90px;
-            background: linear-gradient(180deg, var(--mint) 0%, var(--mint-dark) 100%);
-            border: 3px solid var(--text-dark);
-            border-radius: 80px 80px 0 0;
-        }
-
-        .home-hill::after {
-            content: "";
-            position: absolute;
-            bottom: -3px;
-            left: -30px;
-            width: 80px;
-            height: 60px;
-            background: var(--lavender);
-            border: 3px solid var(--text-dark);
-            border-radius: 40px 40px 0 0;
-            z-index: -1;
+        .home-art .sketch-shape {
+            stroke: var(--text-dark);
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .home-title-wrap {
@@ -1129,8 +1065,8 @@
 const CONFIG = {
     // 首页文案
     home: {
-        // 品牌标签，显示在标题上方，建议用英文 Bilibili
-        brand: "Bilibili",
+        // 品牌标签，显示在标题上方，建议用英文 bilibili
+        brand: "bilibili",
         // 主标题
         title: "不想开学门诊",
         subtitle: "专治各种不想上学的疑难杂症",
@@ -1744,17 +1680,65 @@ window.app = {
         document.getElementById('btn-start').textContent = CONFIG.home.startBtnText;
         document.getElementById('btn-detail').textContent = CONFIG.home.detailLinkText;
 
-        // 渲染首页涂鸦插画风格主视觉
+        // 渲染首页手绘问诊猫咪 SVG
         var artContainer = document.getElementById('home-art');
         var artHTML =
-            '<div class="home-sun"></div>' +
-            '<div class="home-cloud"></div>' +
-            '<div class="home-hill"></div>';
-        if (CONFIG.home.showTV) {
-            artHTML += '<div class="home-character">📺</div>';
-        } else {
-            artHTML += '<div class="home-character">🎒</div>';
-        }
+            '<svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg">' +
+                '<defs>' +
+                    '<filter id="crayon">' +
+                        '<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>' +
+                        '<feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5"/>' +
+                    '</filter>' +
+                '</defs>' +
+                '<!-- 背景色块：活泼橙色块 -->' +
+                '<rect x="15" y="15" width="230" height="190" rx="28" fill="#FFC796" class="sketch-shape" style="filter:url(#crayon)"/>' +
+                '<!-- 背景墙面粉色块 -->' +
+                '<rect x="35" y="35" width="190" height="130" rx="20" fill="#FFD6E0" class="sketch-shape"/>' +
+                '<!-- 问诊桌 -->' +
+                '<rect x="45" y="158" width="170" height="46" rx="14" fill="#A0E7E5" class="sketch-shape"/>' +
+                '<rect x="58" y="168" width="144" height="26" rx="8" fill="#FFFDF7" class="sketch-shape"/>' +
+                '<!-- 桌子上的小牌子 -->' +
+                '<rect x="152" y="142" width="42" height="26" rx="6" fill="#FFE66D" class="sketch-shape"/>' +
+                '<text x="173" y="159" text-anchor="middle" font-size="10" font-weight="800" fill="#3D3D3D">问诊</text>' +
+                '<!-- 猫咪身体 -->' +
+                '<ellipse cx="130" cy="132" rx="40" ry="44" fill="#FFFFFF" class="sketch-shape"/>' +
+                '<!-- 猫咪耳朵 -->' +
+                '<path d="M 96 98 L 85 62 L 118 84 Z" fill="#FFFFFF" class="sketch-shape"/>' +
+                '<path d="M 164 98 L 175 62 L 142 84 Z" fill="#FFFFFF" class="sketch-shape"/>' +
+                '<path d="M 98 90 L 92 70 L 112 82 Z" fill="#FFB7C5" class="sketch-shape"/>' +
+                '<path d="M 162 90 L 168 70 L 148 82 Z" fill="#FFB7C5" class="sketch-shape"/>' +
+                '<!-- 猫咪前爪 -->' +
+                '<ellipse cx="102" cy="168" rx="13" ry="11" fill="#FFFFFF" class="sketch-shape"/>' +
+                '<ellipse cx="158" cy="168" rx="13" ry="11" fill="#FFFFFF" class="sketch-shape"/>' +
+                '<!-- 听诊器 -->' +
+                '<path d="M 108 128 Q 85 155 92 172" fill="none" stroke="#FF9AA2" stroke-width="5" stroke-linecap="round"/>' +
+                '<circle cx="92" cy="176" r="9" fill="#FF9AA2" stroke="#3D3D3D" stroke-width="3"/>' +
+                '<path d="M 152 128 Q 175 155 168 172" fill="none" stroke="#FF9AA2" stroke-width="5" stroke-linecap="round"/>' +
+                '<circle cx="168" cy="176" r="9" fill="#FF9AA2" stroke="#3D3D3D" stroke-width="3"/>' +
+                '<path d="M 118 118 Q 130 150 142 118" fill="none" stroke="#FF9AA2" stroke-width="4" stroke-linecap="round"/>' +
+                '<!-- 猫咪五官：夸张大眼睛 -->' +
+                '<circle cx="110" cy="118" r="14" fill="#3D3D3D"/>' +
+                '<circle cx="114" cy="114" r="5" fill="#FFFFFF"/>' +
+                '<circle cx="150" cy="118" r="14" fill="#3D3D3D"/>' +
+                '<circle cx="154" cy="114" r="5" fill="#FFFFFF"/>' +
+                '<!-- 腮红 -->' +
+                '<ellipse cx="95" cy="135" rx="8" ry="5" fill="#FFB7C5" opacity="0.8"/>' +
+                '<ellipse cx="165" cy="135" rx="8" ry="5" fill="#FFB7C5" opacity="0.8"/>' +
+                '<!-- 鼻子嘴巴 -->' +
+                '<ellipse cx="130" cy="136" rx="5" ry="3" fill="#FF9AA2" class="sketch-shape"/>' +
+                '<path d="M 124 144 Q 130 152 136 144" fill="none" stroke="#3D3D3D" stroke-width="3" stroke-linecap="round"/>' +
+                '<!-- 胡须 -->' +
+                '<path d="M 82 132 L 62 126" class="sketch-line"/>' +
+                '<path d="M 82 142 L 62 146" class="sketch-line"/>' +
+                '<path d="M 178 132 L 198 126" class="sketch-line"/>' +
+                '<path d="M 178 142 L 198 146" class="sketch-line"/>' +
+                '<!-- 涂鸦装饰 -->' +
+                '<path d="M 40 55 L 52 42 L 64 55 L 52 68 Z" fill="#FFE66D" class="sketch-shape"/>' +
+                '<circle cx="208" cy="52" r="9" fill="#B5EAD7" class="sketch-shape"/>' +
+                '<path d="M 218 178 Q 230 166 242 178 Q 230 190 218 178" fill="#C7CEEA" class="sketch-shape"/>' +
+                '<circle cx="38" cy="185" r="5" fill="#FF9AA2" class="sketch-shape"/>' +
+                '<path d="M 220 105 Q 230 95 240 105" fill="none" stroke="#FF9AA2" stroke-width="3" stroke-linecap="round"/>' +
+            '</svg>';
         artContainer.innerHTML = artHTML;
 
         // 渲染首页特色标签
