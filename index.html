@@ -289,32 +289,21 @@
         }
 
         .home-art {
-            width: 260px;
-            height: 220px;
+            width: 280px;
+            height: auto;
             margin: 0 auto 24px;
             position: relative;
             animation: float 4s ease-in-out infinite;
         }
 
-        .home-art svg {
+        .home-cat-img {
             width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-
-        .home-art .sketch-line {
-            fill: none;
-            stroke: var(--text-dark);
-            stroke-width: 3.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .home-art .sketch-shape {
-            stroke: var(--text-dark);
-            stroke-width: 3.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            height: auto;
+            display: block;
+            border-radius: 24px;
+            border: 3px solid var(--text-dark);
+            box-shadow: 5px 5px 0 var(--text-dark);
+            background: var(--white);
         }
 
         .home-title-wrap {
@@ -977,42 +966,66 @@
             color: var(--text-medium);
         }
 
+        .details-section {
+            padding: 24px 22px;
+        }
+
         .details-section h3 {
             font-family: "ZCOOL KuaiLe", "PingFang SC", sans-serif;
-            font-size: 17px;
+            font-size: 19px;
             font-weight: 400;
             color: var(--text-dark);
-            margin-bottom: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed var(--pink);
+            line-height: 1.4;
         }
 
         .details-section p {
-            font-size: 14px;
+            font-size: 14.5px;
             color: var(--text-medium);
-            margin-bottom: 10px;
-            line-height: 1.7;
+            margin-bottom: 12px;
+            line-height: 1.85;
         }
 
-        .details-section ul {
-            list-style: none;
-            padding-left: 0;
+        .details-section p.highlight {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 600;
+            background: var(--yellow);
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 2px solid var(--text-dark);
+            box-shadow: 3px 3px 0 var(--text-dark);
+            margin: 16px 0;
         }
 
-        .details-section li {
-            font-size: 14px;
-            color: var(--text-medium);
-            padding: 8px 0;
-            padding-left: 20px;
+        .details-section p.list-item {
+            padding-left: 22px;
             position: relative;
-            line-height: 1.6;
         }
 
-        .details-section li::before {
-            content: "✦";
-            color: var(--pink);
-            font-size: 10px;
+        .details-section p.list-item::before {
+            content: "•";
             position: absolute;
-            left: 0;
-            top: 12px;
+            left: 6px;
+            color: var(--pink);
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .details-section p.closing {
+            text-align: center;
+            font-family: "ZCOOL KuaiLe", "PingFang SC", sans-serif;
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-top: 20px;
+            padding: 14px;
+            background: var(--mint);
+            border-radius: 16px;
+            border: 2px solid var(--text-dark);
+            box-shadow: 3px 3px 0 var(--text-dark);
         }
 
         /* ==================== 提示弹窗 ==================== */
@@ -1072,8 +1085,8 @@ const CONFIG = {
         subtitle: "专治各种不想上学的疑难杂症",
         // 是否显示首页小电视 emoji：true=显示，false=隐藏
         showTV: false,
-        // 首页特色标签，建议 4 个，2x2 排列
-        features: ["挂号免费", "名医坐镇", "现场开方", "立刻重启"],
+        // 首页特色标签，留空则不显示
+        features: [],
         startBtnText: "去挂号",
         // 详情页入口文案，可以写得更有趣
         detailLinkText: "👀 看看这门诊什么来头"
@@ -1311,45 +1324,51 @@ const CONFIG = {
 
     // 详情页内容
     details: {
-        title: "活动方案详情",
+        title: "这门诊什么来头",
         sections: [
             {
-                title: "项目背景",
+                title: "为什么会有「不想开学门诊」？",
                 paragraphs: [
-                    "每年开学季前后，'不想开学'都会成为社交媒体上的高频情绪词。这种情绪不是简单的'懒'或'厌学'，而是年轻人在假期自由节奏与开学规训节奏之间切换时的正常应激反应。",
-                    "B站作为年轻人密度最高的内容社区，天然承接了这类情绪的表达和消解。"
+                    "如果你最近已经开始出现下面这些症状：",
+                    "早八还没开始，已经开始困了。",
+                    "想到课表就想退出。",
+                    "打开宿舍群，不知道该发什么。",
+                    "暑假追番追得太开心，脑子却像被格式化了。",
+                    "那么恭喜，你可能只是得了——开学综合征。",
+                    "放心，不止你一个人。",
+                    "每年开学前，「不想开学」都会准时上线。不是因为大家突然变懒了，而是身体还停留在暑假模式，脑子已经被通知：「下周开始正常运行。」",
+                    "所以，我们把那些不好意思说、但大家都会有的小情绪，做成了一间「不想开学门诊」。",
+                    "这里没有说教，也没有鸡汤，只有一群和你症状差不多的「病友」，以及一份属于你的开学诊断报告。"
                 ]
             },
             {
-                title: "用户洞察",
+                title: "在这里，你会经历一次什么样的「看诊」？",
                 paragraphs: [
-                    "开学焦虑主要来自四个层面的'掉线'：学习层面（知识遗忘、DDL焦虑）、生活层面（生物钟紊乱、食堂厌倦、体测恐惧）、社交层面（社恐复发、忘记同学名字）、娱乐层面（追番/游戏停不下来）。",
-                    "核心机会：用户需要的不是被教育'要振作'，而是被理解、被调侃、被给到一个轻松的过渡仪式。"
+                    "来到门诊后，你只需要像挂号一样，勾选几个最符合自己的「症状」。",
+                    "系统会根据你的状态，生成一份专属电子诊断单，看看你究竟属于哪一种开学综合征。",
+                    "是「知识蒸发症」？",
+                    "还是「早八昏迷症」？",
+                    "或者是「社恐复发症」、「DDL提前焦虑症」？",
+                    "当然，我们不会真的给你开药。",
+                    "B站的医生们更擅长开的，是各种神奇的「内容处方」。",
+                    "也许是一位UP主分享的学习方法，也许是一份体测自救指南，也许是一部让人重新充满电的纪录片、一段能让你笑出来的视频，或者一个陪你一起熬过新学期的兴趣圈子。",
+                    "希望看完以后，你的状态也能顺便更新一下。"
                 ]
             },
             {
-                title: "目标人群",
-                list: [
-                    "主要人群：18-24岁大学生与准大学生",
-                    "泛化人群：高中生、研究生、年轻职场新人",
-                    "品牌侧人群：B站老用户与轻度用户"
-                ]
-            },
-            {
-                title: "品牌目标",
-                list: [
-                    "短期：提升开学季站内活动参与度和话题讨论量",
-                    "中期：强化'B站懂年轻人开学焦虑'的平台心智",
-                    "长期：推动B站从娱乐平台向年轻人生活解决方案平台认知延伸"
-                ]
-            },
-            {
-                title: "玩法链路",
-                list: [
-                    "Step 1：挂号 — 选择开学疑难杂症",
-                    "Step 2：诊断 — UP主医生出具电子诊断单",
-                    "Step 3：开方 — 生成B站专属内容处方单",
-                    "Step 4：证书 — 领取新学期状态重启证书并分享"
+                title: "为什么偏偏是B站？",
+                paragraphs: [
+                    "因为很多时候，年轻人的问题，并没有标准答案。",
+                    "但总能在B站找到一个愿意分享经验的人，一个经历过同样事情的人，或者一条恰好能治好今天情绪的视频。",
+                    "有人教你学习。",
+                    "有人陪你运动。",
+                    "有人分享大学生活。",
+                    "有人陪你追番、打游戏、放松一下。",
+                    "这些内容未必能一下子解决所有问题，却总能让开学这件事，变得没那么难。",
+                    "所以，「不想开学门诊」并不是想治好谁。",
+                    "只是想在新学期开始之前，陪大家一起做一次状态重启。",
+                    "如果你的开学综合征也开始发作了——",
+                    "欢迎来挂个号。🩺"
                 ]
             }
         ],
@@ -1375,19 +1394,14 @@ const CONFIG = {
         <!-- ==================== 首页 ==================== -->
         <div id="screen-home" class="screen flex-active active">
             <div class="home-art" id="home-art">
-                <!-- 涂鸦插画风格主视觉，由 JS 根据 CONFIG.home.showTV 动态渲染 -->
+                <img src="cat-doctor.png" alt="问诊猫咪" class="home-cat-img">
             </div>
             <div class="home-title-wrap">
-                <span class="home-brand" id="home-brand">哔哩哔哩</span>
+                <span class="home-brand" id="home-brand">bilibili</span>
                 <h1 class="home-title" id="home-title">不想开学门诊</h1>
             </div>
             <p class="home-subtitle" id="home-subtitle">专治各种不想上学的疑难杂症</p>
-            <div class="home-features" id="home-features">
-                <span class="home-feature-item">挂号免费</span>
-                <span class="home-feature-item">名医坐镇</span>
-                <span class="home-feature-item">现场开方</span>
-                <span class="home-feature-item">立刻重启</span>
-            </div>
+            <div class="home-features" id="home-features"></div>
             <div class="home-buttons">
                 <button class="btn btn-primary" id="btn-start" onclick="window.app.goToRegister()">去挂号</button>
                 <button class="btn btn-secondary" id="btn-detail" onclick="window.app.goToDetails()">👀 看看这门诊什么来头</button>
@@ -1603,7 +1617,7 @@ const CONFIG = {
 
             <div class="details-header">
                 <h2 class="details-title" id="details-title">活动方案详情</h2>
-                <p class="details-subtitle">策略、洞察与目标人群</p>
+                <p class="details-subtitle" id="details-subtitle">策略、洞察与目标人群</p>
             </div>
 
             <div id="details-container"></div>
@@ -1680,75 +1694,19 @@ window.app = {
         document.getElementById('btn-start').textContent = CONFIG.home.startBtnText;
         document.getElementById('btn-detail').textContent = CONFIG.home.detailLinkText;
 
-        // 渲染首页手绘问诊猫咪 SVG
-        var artContainer = document.getElementById('home-art');
-        var artHTML =
-            '<svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg">' +
-                '<defs>' +
-                    '<filter id="crayon">' +
-                        '<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>' +
-                        '<feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5"/>' +
-                    '</filter>' +
-                '</defs>' +
-                '<!-- 背景色块：活泼橙色块 -->' +
-                '<rect x="15" y="15" width="230" height="190" rx="28" fill="#FFC796" class="sketch-shape" style="filter:url(#crayon)"/>' +
-                '<!-- 背景墙面粉色块 -->' +
-                '<rect x="35" y="35" width="190" height="130" rx="20" fill="#FFD6E0" class="sketch-shape"/>' +
-                '<!-- 问诊桌 -->' +
-                '<rect x="45" y="158" width="170" height="46" rx="14" fill="#A0E7E5" class="sketch-shape"/>' +
-                '<rect x="58" y="168" width="144" height="26" rx="8" fill="#FFFDF7" class="sketch-shape"/>' +
-                '<!-- 桌子上的小牌子 -->' +
-                '<rect x="152" y="142" width="42" height="26" rx="6" fill="#FFE66D" class="sketch-shape"/>' +
-                '<text x="173" y="159" text-anchor="middle" font-size="10" font-weight="800" fill="#3D3D3D">问诊</text>' +
-                '<!-- 猫咪身体 -->' +
-                '<ellipse cx="130" cy="132" rx="40" ry="44" fill="#FFFFFF" class="sketch-shape"/>' +
-                '<!-- 猫咪耳朵 -->' +
-                '<path d="M 96 98 L 85 62 L 118 84 Z" fill="#FFFFFF" class="sketch-shape"/>' +
-                '<path d="M 164 98 L 175 62 L 142 84 Z" fill="#FFFFFF" class="sketch-shape"/>' +
-                '<path d="M 98 90 L 92 70 L 112 82 Z" fill="#FFB7C5" class="sketch-shape"/>' +
-                '<path d="M 162 90 L 168 70 L 148 82 Z" fill="#FFB7C5" class="sketch-shape"/>' +
-                '<!-- 猫咪前爪 -->' +
-                '<ellipse cx="102" cy="168" rx="13" ry="11" fill="#FFFFFF" class="sketch-shape"/>' +
-                '<ellipse cx="158" cy="168" rx="13" ry="11" fill="#FFFFFF" class="sketch-shape"/>' +
-                '<!-- 听诊器 -->' +
-                '<path d="M 108 128 Q 85 155 92 172" fill="none" stroke="#FF9AA2" stroke-width="5" stroke-linecap="round"/>' +
-                '<circle cx="92" cy="176" r="9" fill="#FF9AA2" stroke="#3D3D3D" stroke-width="3"/>' +
-                '<path d="M 152 128 Q 175 155 168 172" fill="none" stroke="#FF9AA2" stroke-width="5" stroke-linecap="round"/>' +
-                '<circle cx="168" cy="176" r="9" fill="#FF9AA2" stroke="#3D3D3D" stroke-width="3"/>' +
-                '<path d="M 118 118 Q 130 150 142 118" fill="none" stroke="#FF9AA2" stroke-width="4" stroke-linecap="round"/>' +
-                '<!-- 猫咪五官：夸张大眼睛 -->' +
-                '<circle cx="110" cy="118" r="14" fill="#3D3D3D"/>' +
-                '<circle cx="114" cy="114" r="5" fill="#FFFFFF"/>' +
-                '<circle cx="150" cy="118" r="14" fill="#3D3D3D"/>' +
-                '<circle cx="154" cy="114" r="5" fill="#FFFFFF"/>' +
-                '<!-- 腮红 -->' +
-                '<ellipse cx="95" cy="135" rx="8" ry="5" fill="#FFB7C5" opacity="0.8"/>' +
-                '<ellipse cx="165" cy="135" rx="8" ry="5" fill="#FFB7C5" opacity="0.8"/>' +
-                '<!-- 鼻子嘴巴 -->' +
-                '<ellipse cx="130" cy="136" rx="5" ry="3" fill="#FF9AA2" class="sketch-shape"/>' +
-                '<path d="M 124 144 Q 130 152 136 144" fill="none" stroke="#3D3D3D" stroke-width="3" stroke-linecap="round"/>' +
-                '<!-- 胡须 -->' +
-                '<path d="M 82 132 L 62 126" class="sketch-line"/>' +
-                '<path d="M 82 142 L 62 146" class="sketch-line"/>' +
-                '<path d="M 178 132 L 198 126" class="sketch-line"/>' +
-                '<path d="M 178 142 L 198 146" class="sketch-line"/>' +
-                '<!-- 涂鸦装饰 -->' +
-                '<path d="M 40 55 L 52 42 L 64 55 L 52 68 Z" fill="#FFE66D" class="sketch-shape"/>' +
-                '<circle cx="208" cy="52" r="9" fill="#B5EAD7" class="sketch-shape"/>' +
-                '<path d="M 218 178 Q 230 166 242 178 Q 230 190 218 178" fill="#C7CEEA" class="sketch-shape"/>' +
-                '<circle cx="38" cy="185" r="5" fill="#FF9AA2" class="sketch-shape"/>' +
-                '<path d="M 220 105 Q 230 95 240 105" fill="none" stroke="#FF9AA2" stroke-width="3" stroke-linecap="round"/>' +
-            '</svg>';
-        artContainer.innerHTML = artHTML;
-
-        // 渲染首页特色标签
+        // 渲染首页特色标签（为空则隐藏）
         var featuresContainer = document.getElementById('home-features');
         featuresContainer.innerHTML = '';
-        for (var i = 0; i < CONFIG.home.features.length; i++) {
-            var span = document.createElement('span');
-            span.className = 'home-feature-item';
-            span.textContent = CONFIG.home.features[i];
-            featuresContainer.appendChild(span);
+        if (CONFIG.home.features.length === 0) {
+            featuresContainer.style.display = 'none';
+        } else {
+            featuresContainer.style.display = '';
+            for (var i = 0; i < CONFIG.home.features.length; i++) {
+                var span = document.createElement('span');
+                span.className = 'home-feature-item';
+                span.textContent = CONFIG.home.features[i];
+                featuresContainer.appendChild(span);
+            }
         }
     },
 
@@ -2034,6 +1992,7 @@ window.app = {
     // ==================== 详情页初始化 ====================
     initDetails: function() {
         document.getElementById('details-title').textContent = CONFIG.details.title;
+        document.getElementById('details-subtitle').textContent = CONFIG.home.subtitle;
 
         var container = document.getElementById('details-container');
         container.innerHTML = '';
@@ -2049,8 +2008,23 @@ window.app = {
 
             if (section.paragraphs) {
                 for (var j = 0; j < section.paragraphs.length; j++) {
+                    var text = section.paragraphs[j];
                     var para = document.createElement('p');
-                    para.textContent = section.paragraphs[j];
+                    para.textContent = text;
+
+                    // 短句自动做成列表项样式
+                    if (text.length < 16 && text.indexOf('。') !== -1) {
+                        para.className = 'list-item';
+                    }
+                    // 结尾段落特殊样式
+                    if (text.indexOf('欢迎来挂个号') !== -1) {
+                        para.className = 'closing';
+                    }
+                    // 强调句
+                    if (text.indexOf('那么恭喜') !== -1 || text.indexOf('这里不是') !== -1) {
+                        para.className = 'highlight';
+                    }
+
                     sectionDiv.appendChild(para);
                 }
             }
